@@ -40,9 +40,8 @@ class formulas:
                 if syll_this_token >= 2:
                     if n_sent <= 30:
                         n_poly_token += 1
-                    else:
-                        if i <= 10 or i >= SMOG_upper_bound or SMOG_middle_bound1 <= i <= SMOG_middle_bound2:
-                            n_poly_token += 1
+                    elif i <= 10 or i >= SMOG_upper_bound or SMOG_middle_bound1 <= i <= SMOG_middle_bound2:
+                        n_poly_token += 1
                 n_char += len(token)
 
         self.n_syll = n_syll
@@ -53,13 +52,11 @@ class formulas:
 
     # follow "new" automated readability index in reference 1
     def automated_readability_index(self):
-        result = 0.37*(self.n_token/self.n_sent)+5.84*(self.n_char/self.n_token)-26.01
-        return result
+        return 0.37*(self.n_token/self.n_sent)+5.84*(self.n_char/self.n_token)-26.01
     
     # follow "new" fog count in reference 1
     def fog_count(self):
-        result = ((self.n_easy_token + 3*(self.n_diff_token))/self.n_sent - 3)/2
-        return result
+        return ((self.n_easy_token + 3*(self.n_diff_token))/self.n_sent - 3)/2
 
     """
     # follow "old" flesch reading ease in reference 1
@@ -70,27 +67,26 @@ class formulas:
 
     # follow "new" flesch reading ease in reference 1
     def flesch_grade_level(self):
-        result = 0.39*(self.n_token/self.n_sent) + 11.8*(self.n_syll/self.n_token) - 15.59
-        return result
+        return (
+            0.39 * (self.n_token / self.n_sent)
+            + 11.8 * (self.n_syll / self.n_token)
+            - 15.59
+        )
 
     # follow reference 2
     def smog_index(self):
-        result = math.sqrt(self.n_poly_token)
-        return result
+        return math.sqrt(self.n_poly_token)
     
     # follow reference 3
     def coleman_liau_index(self):
-        result = 0.0588*(self.n_token/100) - 0.00296*(self.n_sent) - 15.8
-        return result
+        return 0.0588*(self.n_token/100) - 0.00296*(self.n_sent) - 15.8
     
     # follow reference 3
     def linsear_write_formula(self):
         result = (self.n_easy_token + 3*(self.n_diff_token))/self.n_sent
-        if result > 10:
-            result /= 2
-        else:
+        if result <= 10:
             result -= 2
-            result /= 2
+        result /= 2
         return result
     
 
@@ -102,7 +98,7 @@ def retrieve(origin_doc, sent_token_list, n_sent, n_token):
     ARI = Formulas.automated_readability_index()
     FKG = Formulas.flesch_grade_level()
     LWF = Formulas.linsear_write_formula()
-    result = {
+    return {
         "FleschG_S":FKG,
         "AutoRea_S":ARI,
         "ColeLia_S":CML,
@@ -110,4 +106,3 @@ def retrieve(origin_doc, sent_token_list, n_sent, n_token):
         "Gunning_S":GNF,
         "LinseaW_S":LWF,
     }
-    return result

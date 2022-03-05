@@ -24,13 +24,13 @@ def retrieve(NLP_doc, n_sent, n_token):
         for ent in NLP_doc.ents:
             to_EntiM_C += 1
             ent_list.append(ent.text)
-        
+
         for ent in ent_list:
             if ent_list.count(ent) == 1:
                 to_UEnti_C += 1
                 unique_ent_list.append(ent)
 
-        result = {
+        return {
             "to_EntiM_C": to_EntiM_C, 
             "as_EntiM_C": to_EntiM_C/n_sent, 
             "at_EntiM_C": to_EntiM_C/n_token,
@@ -38,5 +38,3 @@ def retrieve(NLP_doc, n_sent, n_token):
             "as_UEnti_C": to_UEnti_C/n_sent,
             "at_UEnti_C": to_UEnti_C/n_token,
         }
-
-        return result

@@ -28,25 +28,25 @@ def retrieve(NLP_doc, n_token, n_sent):
     to_FuncW_C = 0
 
     for token in NLP_doc:
-        if token.pos_ == "NOUN" or token.pos_ == "VERB" or token.pos_ == "NUM" or token.pos_ == "ADJ" or token.pos_ == "ADV":
+        if token.pos_ in ["NOUN", "VERB", "NUM", "ADJ", "ADV"]:
             to_ContW_C += 1
         else:
             to_FuncW_C += 1
 
-        if token.pos_ == "NOUN":
-            to_NoTag_C += 1
-        if token.pos_ == "VERB":
-            to_VeTag_C += 1
         if token.pos_ == "ADJ":
             to_AjTag_C += 1
-        if token.pos_ == "ADV":
+        elif token.pos_ == "ADV":
             to_AvTag_C += 1
-        if token.pos_ == "SCONJ":
-            to_SuTag_C += 1
-        if token.pos_ == "CCONJ":
+        elif token.pos_ == "CCONJ":
             to_CoTag_C += 1
-    
-    result = {
+
+        elif token.pos_ == "NOUN":
+            to_NoTag_C += 1
+        elif token.pos_ == "SCONJ":
+            to_SuTag_C += 1
+        elif token.pos_ == "VERB":
+            to_VeTag_C += 1
+    return {
         "to_NoTag_C":float(to_NoTag_C),
         "as_NoTag_C":float(division(to_NoTag_C,n_sent)),
         "at_NoTag_C":float(division(to_NoTag_C,n_token)),
@@ -103,4 +103,3 @@ def retrieve(NLP_doc, n_token, n_sent):
         "at_FuncW_C":float(division(to_FuncW_C,n_token)),
         "ra_CoFuW_C":float(division(to_ContW_C,to_FuncW_C)), 
     }
-    return result

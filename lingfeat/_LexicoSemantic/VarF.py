@@ -24,33 +24,20 @@ def retrieve(NLP_doc):
     verb_list = []
     adje_list = []
     adve_list = []
-    n_unoun = 0
-    n_uverb = 0
-    n_uadje = 0
-    n_uadve = 0
     for token in NLP_doc:
-        if token.pos_ == "NOUN":
-            noun_list.append(token.lemma)
-        if token.pos_ == "VERB":
-            verb_list.append(token.lemma)
         if token.pos_ == "ADJ":
             adje_list.append(token.lemma)
-        if token.pos_ == "ADV":
+        elif token.pos_ == "ADV":
             adve_list.append(token.lemma)
-    for noun in noun_list:
-        if noun_list.count(noun) == 1:
-            n_unoun += 1
-    for verb in verb_list:
-        if verb_list.count(verb) == 1:
-            n_uverb += 1
-    for adje in adje_list:
-        if adje_list.count(adje) == 1:
-            n_uadje += 1
-    for adve in adve_list:
-        if adve_list.count(adve) == 1:
-            n_uadve += 1
-    
-    result = {
+        elif token.pos_ == "NOUN":
+            noun_list.append(token.lemma)
+        elif token.pos_ == "VERB":
+            verb_list.append(token.lemma)
+    n_unoun = sum(noun_list.count(noun) == 1 for noun in noun_list)
+    n_uverb = sum(verb_list.count(verb) == 1 for verb in verb_list)
+    n_uadje = sum(adje_list.count(adje) == 1 for adje in adje_list)
+    n_uadve = sum(adve_list.count(adve) == 1 for adve in adve_list)
+    return {
         "SimpNoV_S":float(division(n_unoun,(len(noun_list)))),
         "SquaNoV_S":float(division((n_unoun)**2,(len(noun_list)))),
         "CorrNoV_S":float(division(n_unoun,(math.sqrt(2*len(noun_list))))),
@@ -64,5 +51,3 @@ def retrieve(NLP_doc):
         "SquaAvV_S":float(division((n_uadve)**2,(len(adve_list)))),
         "CorrAvV_S":float(division(n_uadve,(math.sqrt(2*len(adve_list))))),
     }
-
-    return result

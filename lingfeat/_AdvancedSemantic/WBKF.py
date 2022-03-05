@@ -15,16 +15,14 @@ import gensim
 from lingfeat.utils import division
 
 def richness(probability_list):
-    sum_ = 0
-    for idx, number in enumerate(probability_list):
-        sum_ += float((idx+1)*number)
-    return sum_
+    return sum(
+        float((idx + 1) * number)
+        for idx, number in enumerate(probability_list)
+    )
 
 
 def clarity(probability_list):
-    sum_ = 0
-    for number in probability_list[1:]:
-        sum_ += (probability_list[0] - number)
+    sum_ = sum((probability_list[0] - number) for number in probability_list[1:])
     result = division(sum_,len(probability_list))
     if len(probability_list) == 1:
         result = probability_list[0]
@@ -39,17 +37,10 @@ def noise(probability_list):
         s2 += (number - mean)**2
         s4 += (number - mean)**4
 
-    result = len(probability_list)*(division(s4,(s2)**2))
-
-    return result
+    return len(probability_list)*(division(s4,(s2)**2))
 
 
 def get_probability_lists(token_list, dir_path):
-    n_topic_list = [50, 100, 150, 200]
-
-    # lda_list is a list of Gensim lda objects
-    lda_list = []
-
     # probability_lists is a list of list. 
     # [[probability list at topic 50],[probability list at topic 100],[probability list at topic 150],[probability list at topic 200]]
     probability_lists = []
@@ -57,8 +48,13 @@ def get_probability_lists(token_list, dir_path):
     common_dictionary = gensim.corpora.dictionary.Dictionary([token_list])
     common_corpus = [common_dictionary.doc2bow(token_list)]
 
-    for n_topic in n_topic_list:
-        lda_list.append(gensim.models.ldamodel.LdaModel.load(dir_path+"/_AdvancedSemantic/model/weebit" + str(n_topic)))
+    n_topic_list = [50, 100, 150, 200]
+    lda_list = [
+        gensim.models.ldamodel.LdaModel.load(
+            dir_path + "/_AdvancedSemantic/model/weebit" + str(n_topic)
+        )
+        for n_topic in n_topic_list
+    ]
 
     probability_list = []
     for lda in lda_list:
@@ -83,16 +79,18 @@ def retrieve(token_list, dir_path):
         clarity_list.append(clarity(probability_list))
         noise_list.append(noise(probability_list))
         n_topics_list.append(len(probability_list))
-    
+
     # make resulting dictionary
-    result = {}
-    for i,feature in enumerate(richness_list):
-        result["BRich"+n_topic_list_for_naming[i]+"_S"] = feature
+    result = {
+        f"BRich{n_topic_list_for_naming[i]}_S": feature
+        for i, feature in enumerate(richness_list)
+    }
+
     for i,feature in enumerate(clarity_list):
-        result["BClar"+n_topic_list_for_naming[i]+"_S"] = feature
+        result[f"BClar{n_topic_list_for_naming[i]}_S"] = feature
     for i,feature in enumerate(noise_list):
-        result["BNois"+n_topic_list_for_naming[i]+"_S"] = feature
+        result[f"BNois{n_topic_list_for_naming[i]}_S"] = feature
     for i,feature in enumerate(n_topics_list):
-        result["BTopc"+n_topic_list_for_naming[i]+"_S"] = feature
-    
+        result[f"BTopc{n_topic_list_for_naming[i]}_S"] = feature
+
     return result

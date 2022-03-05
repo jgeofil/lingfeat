@@ -39,7 +39,7 @@ def retrieve(token_list, n_token, n_sent, dir_path):
             to_AABrL_C += float(scores_for_this_token[12])
             to_AACoL_C += float(scores_for_this_token[13])
 
-    result = {
+    return {
         "to_AAKuW_C": to_AAKuW_C,
         "as_AAKuW_C": to_AAKuW_C/n_sent ,
         "at_AAKuW_C": to_AAKuW_C/n_token,
@@ -55,5 +55,4 @@ def retrieve(token_list, n_token, n_sent, dir_path):
         "to_AACoL_C": to_AABrL_C,
         "as_AACoL_C": to_AABrL_C/n_sent ,
         "at_AACoL_C": to_AABrL_C/n_token,
-    }
-    return result   
+    }   

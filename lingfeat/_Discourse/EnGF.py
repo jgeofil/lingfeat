@@ -63,11 +63,9 @@ class EntityGrid:
 
     def __init__(self, NLP_doc, n_sent):
         """Construct EntityGrid object."""
-        # Initialization
-        entity_map = dict()
-        entity_grid = dict()
+        entity_grid = {}
         i = 1
-        entity_map['s%d' % i] = []
+        entity_map = {'s%d' % i: []}
         entity_features = {
             'SS': 0,
             'SO': 0,
@@ -124,9 +122,9 @@ class EntityGrid:
                 # Adding 1 to transition count
                 entity_features[transition] += 1
 
-        for prob in entity_features:
+        for prob, value in entity_features.items():
             if total_transitions != 0:
-                entity_features[prob] /= float(total_transitions)
+                value /= float(total_transitions)
             else:
                 entity_features[prob] = 0.0
 
@@ -138,23 +136,25 @@ class EntityGrid:
         """
         Retrieve All
         """
-        result = {}
-        result['ra_SSTo_C'] = self.prob['SS']
-        result['ra_SOTo_C'] = self.prob['SO']
-        result['ra_SXTo_C'] = self.prob['SX']
-        result['ra_SNTo_C'] = self.prob['S-']
-        result['ra_OSTo_C'] = self.prob['OS']
-        result['ra_OOTo_C'] = self.prob['OO']
-        result['ra_OXTo_C'] = self.prob['OX']
-        result['ra_ONTo_C'] = self.prob['O-']
-        result['ra_XSTo_C'] = self.prob['XS']
-        result['ra_XOTo_C'] = self.prob['XO']
-        result['ra_XXTo_C'] = self.prob['XX']
-        result['ra_XNTo_C'] = self.prob['X-']
-        result['ra_NSTo_C'] = self.prob['-S']
-        result['ra_NOTo_C'] = self.prob['-O']
-        result['ra_NXTo_C'] = self.prob['-X']
-        result['ra_NNTo_C'] = self.prob['--']
+        result = {
+            'ra_SSTo_C': self.prob['SS'],
+            'ra_SOTo_C': self.prob['SO'],
+            'ra_SXTo_C': self.prob['SX'],
+            'ra_SNTo_C': self.prob['S-'],
+            'ra_OSTo_C': self.prob['OS'],
+            'ra_OOTo_C': self.prob['OO'],
+            'ra_OXTo_C': self.prob['OX'],
+            'ra_ONTo_C': self.prob['O-'],
+            'ra_XSTo_C': self.prob['XS'],
+            'ra_XOTo_C': self.prob['XO'],
+            'ra_XXTo_C': self.prob['XX'],
+            'ra_XNTo_C': self.prob['X-'],
+            'ra_NSTo_C': self.prob['-S'],
+            'ra_NOTo_C': self.prob['-O'],
+            'ra_NXTo_C': self.prob['-X'],
+            'ra_NNTo_C': self.prob['--'],
+        }
+
         lcresult = get_local_coherence(self)
         return {**result, **lcresult}
 
@@ -193,11 +193,11 @@ def get_local_coherence(EntityGrid):
     n_sent = EntityGrid.n_sent
     grid = EntityGrid.grid
 
-    PW = [[0] * n_sent for i in range(n_sent)]
+    PW = [[0] * n_sent for _ in range(n_sent)]
 
     # Weight Matrix for PACC, syntactic information is accounted for by
     # integrating the edges of the bipartite graph
-    W = [[0] * n_sent for i in range(n_sent)]
+    W = [[0] * n_sent for _ in range(n_sent)]
 
     for entity in grid:
         for i in range(n_sent):
@@ -237,7 +237,7 @@ def get_local_coherence(EntityGrid):
     local_coherence_PU_dist /= n_sent
     local_coherence_PA_dist /= n_sent
 
-    result = {
+    return {
         'LoCohPA_S':local_coherence_PU,        
         'LoCohPW_S':local_coherence_PW,
         'LoCohPU_S':local_coherence_PA,
@@ -245,4 +245,3 @@ def get_local_coherence(EntityGrid):
         'LoCoDPW_S':local_coherence_PW_dist,
         'LoCoDPU_S':local_coherence_PA_dist,
     }
-    return result

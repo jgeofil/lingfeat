@@ -34,7 +34,7 @@ def retrieve(SuPar, sent_token_list, n_token, n_sent):
         to_PrPhr_C += parsed_tree.count("PP")
         to_AjPhr_C += parsed_tree.count("ADJP")
         to_AvPhr_C += parsed_tree.count("ADVP")
-    result = {
+    return {
         "to_NoPhr_C": to_NoPhr_C,
         "as_NoPhr_C": float(division(to_NoPhr_C,n_sent)),
         "at_NoPhr_C": float(division(to_NoPhr_C,n_token)),
@@ -89,7 +89,6 @@ def retrieve(SuPar, sent_token_list, n_token, n_sent):
         "ra_AvPrP_C": float(division(to_AvPhr_C,to_PrPhr_C)),
         "ra_AvAjP_C": float(division(to_AvPhr_C,to_AjPhr_C)),
     }
-    return result
 
 
 

@@ -28,11 +28,14 @@ def retrieve(n_token,token_list):
         if float(n_utoken/n_token) >= 0.72:
             MTLD_count += 1
 
-    result={
-        "SimpTTR_S":float(n_utoken/n_token),
-        "CorrTTR_S":float(n_utoken/math.sqrt(2*n_token)),
-        "BiLoTTR_S":float(math.log(n_utoken)/math.log(n_token)),
-        "UberTTR_S":float(division(((math.log(n_utoken))**2),(math.log(n_token/n_utoken)))),
-        "MTLDTTR_S":float(MTLD_count)
+    return {
+        "SimpTTR_S": float(n_utoken / n_token),
+        "CorrTTR_S": float(n_utoken / math.sqrt(2 * n_token)),
+        "BiLoTTR_S": float(math.log(n_utoken) / math.log(n_token)),
+        "UberTTR_S": float(
+            division(
+                ((math.log(n_utoken)) ** 2), (math.log(n_token / n_utoken))
+            )
+        ),
+        "MTLDTTR_S": float(MTLD_count),
     }
-    return result

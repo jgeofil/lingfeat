@@ -44,7 +44,7 @@ def retrieve(token_list, n_token, n_sent, dir_path):
             to_SbSBC_C += float(scores_for_this_token[7])
             to_SbL1C_C += float(scores_for_this_token[8])
 
-    result = {
+    return {
         "to_SbFrQ_C": to_SbFrQ_C,
         "as_SbFrQ_C": to_SbFrQ_C/n_sent ,
         "at_SbFrQ_C": to_SbFrQ_C/n_token,
@@ -69,5 +69,4 @@ def retrieve(token_list, n_token, n_sent, dir_path):
         "to_SbL1C_C": to_SbL1C_C,
         "as_SbL1C_C": to_SbL1C_C/n_sent ,
         "at_SbL1C_C": to_SbL1C_C/n_token,
-    }
-    return result  
+    }  

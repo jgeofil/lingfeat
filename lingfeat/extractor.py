@@ -123,18 +123,17 @@ class pass_text:
                     if short == True:
                         n_token += 1
                         token_list.append(token.lemma_.lower())
-                    if short == False:
-                        if len(token.text) >= 3:
-                            n_token += 1
-                            token_list.append(token.lemma_.lower())
+                    if short == False and len(token.text) >= 3:
+                        n_token += 1
+                        token_list.append(token.lemma_.lower())
             if len(temp_list) > 3:
                 sent_token_list.append(temp_list)
 
-        self.n_token = n_token 
+        self.n_token = n_token
         self.n_sent = n_sent
         self.token_list = token_list
         self.sent_token_list = sent_token_list
-        
+
         result = {"n_token": self.n_token, 
                     "n_sent": self.n_sent
                     }

@@ -21,10 +21,8 @@ from lingfeat.utils import count_syllables
 def retrieve(origin_doc, token_list, n_token, n_sent):
     total_count_char = len(origin_doc.replace(" ",""))
     total_count_tokn = n_token
-    total_count_syll = 0
-    for token in token_list:
-        total_count_syll += count_syllables(token)
-    result = {
+    total_count_syll = sum(count_syllables(token) for token in token_list)
+    return {
         "TokSenM_S":float(n_token*n_sent),
         "TokSenS_S":float(math.sqrt(n_token*n_sent)),
         "TokSenL_S":float(math.log(n_token)/math.log(n_sent)),
@@ -34,4 +32,3 @@ def retrieve(origin_doc, token_list, n_token, n_sent):
         "as_Chara_C":float(total_count_char/n_sent),   
         "at_Chara_C":float(total_count_char/n_token),
     }
-    return result
